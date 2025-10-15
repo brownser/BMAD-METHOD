@@ -141,6 +141,27 @@ npm run install:bmad # build and install all to a destination folder
 
 BMAD™'s natural language framework works in ANY domain. Expansion packs provide specialized AI agents for creative writing, business strategy, health & wellness, education, and more. Also expansion packs can expand the core BMAD-METHOD™ with specific functionality that is not generic for all cases. [See the Expansion Packs Guide](docs/expansion-packs.md) and learn to create your own!
 
+### Mortgage Loan Origination (Rocket Pro TPO)
+
+Bring BMAD™ into a one-person brokerage by automating the most time-consuming mortgage pricing workflows:
+
+- **Rocket Pro TPO rate-sheet ingestion** – Upload daily CSV/XLSX rate sheets directly into BMAD to normalize buy rate, lock period, loan product, and pricing adjusters for conforming and non-conforming scenarios.
+- **Automated pricing intelligence** – Compare lock scenarios, surface LLPA adjustments, and expose margin overlays so you can quote borrowers faster without logging into multiple portals.
+
+#### How the workflow comes together
+
+1. **Manual rate-sheet upload** – Drop the Rocket Pro TPO export into the CLI (`npm run bmad -- pricing rate-sheet ./path/to/file.csv`) or call the API `POST /pricing/rate-sheet` with the file attached. BMAD queues the import, validates headers, and stores the raw payload.
+2. **Domain parser responsibilities** – The mortgage parser inspects tab names, interprets program columns, converts pricing adjustments into structured JSON, and normalizes rate/cost grids so downstream agents have a consistent schema.
+3. **Quote retrieval** – Request pricing through the CLI (`npm run bmad -- pricing quote --loan-config ./loan.json`) or via `POST /pricing/quote`. The quote endpoint returns eligible programs, LLPA breakdown, broker margin overlays, and lock recommendations.
+
+#### Configuration & deployment
+
+- **Expansion pack assets** – All prompts, story files, and orchestrations ship in the forthcoming [Mortgage LOS expansion pack](expansion-packs/bmad-mortgage-los/) directory.
+- **Environment configuration** – `rocket_pro_tpo.yaml` defines column mappings, sheet aliases, eligibility filters, and per-product overlays so you can tweak the parser without editing code.
+- **Database impact** – Enable the `mortgage_pricing` schema (or add new tables if self-hosting) with entities for `rate_sheet_files`, `pricing_grid_rows`, `adjustment_rules`, and `quote_requests`. Each import writes to `rate_sheet_files` and bulk inserts normalized rows for fast quote lookups.
+
+With these pieces in place, a solo broker can upload Rocket Pro TPO pricing once per day, run quotes from the CLI or API, and keep BMAD in sync with market shifts without building a custom LOS from scratch.
+
 ## Documentation & Resources
 
 ### Essential Guides
