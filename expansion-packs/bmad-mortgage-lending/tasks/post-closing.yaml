@@ -1,0 +1,92 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/post-closing.yaml
+name: post-closing
+stage: post-closing
+title: Post-Closing & Retention Workflow
+description: |
+  Finalize funding documentation, deliver investor packages, and initiate
+  retention communications to drive repeat and referral business.
+los_actions:
+  - Board loan for servicing or investor delivery
+  - Reconcile trailing documents
+  - Launch customer retention campaign
+applicable_agents:
+  - loan-processor
+  - marketing-assistant
+  - compliance-analyst
+inputs:
+  funded_package:
+    description: Executed closing package, funding numbers, and wire confirmations
+    required: true
+  trailing_docs_status:
+    description: Outstanding documents still due from settlement or borrower
+    required: true
+  investor_delivery_requirements:
+    description: Shipping specs, stacking order, and delivery method
+    required: true
+  customer_experience_notes:
+    description: Feedback or testimonials gathered during closing
+    required: false
+elicitation:
+  enabled: true
+  prompts:
+    - order: 1
+      question: "What documents are included in the funded package and what remains outstanding?"
+      capture: funded_package
+    - order: 2
+      question: "List any trailing documents still required and who owns each action."
+      capture: trailing_docs_status
+steps:
+  - number: 1
+    title: Board loan and ship investor package
+    los_action: Investor delivery
+    owner: loan-processor
+    checklist:
+      - post-closing-audit-checklist.md
+    description: |
+      1. Assemble investor package following investor-delivery-data-points.md and submission instructions.
+      2. Upload signed documents and data tape to investor portal or LOS shipping module.
+      3. Record tracking information and delivery confirmation in LOS.
+  - number: 2
+    title: Reconcile trailing documents
+    los_action: Trailing document management
+    owner: loan-processor
+    description: |
+      1. Monitor trailing_docs_status and assign follow-up tasks with due dates.
+      2. Notify settlement agent using post-closing-care-email.md when documents are outstanding.
+      3. Update compliance-trigger-table.md log if any critical documents exceed SLA thresholds.
+  - number: 3
+    title: Complete compliance & QC review
+    los_action: QC review
+    owner: compliance-analyst
+    checklist:
+      - fair-lending-variance-checklist.md
+      - trid-compliance-checklist.md
+    description: |
+      1. Conduct TRID cure verification and update compliance-review-summary.md with findings.
+      2. Audit funding numbers vs. Closing Disclosure for tolerance variances.
+      3. Archive review notes and escalate exceptions.
+  - number: 4
+    title: Launch retention nurture
+    los_action: Post-closing campaign
+    owner: marketing-assistant
+    description: |
+      1. Draft thank-you and homeownership tips using post-closing-care-email.md and retention-offer-library.md.
+      2. Schedule testimonial request with testimonial-request.md referencing customer_experience_notes.
+      3. Set reminders for annual mortgage check-in and partner referral asks.
+outputs:
+  - investor_shipping_confirmation
+  - trailing_docs_register
+  - retention_campaign_plan
+resources:
+  checklists:
+    - post-closing-audit-checklist.md
+    - fair-lending-variance-checklist.md
+    - trid-compliance-checklist.md
+  templates:
+    - post-closing-care-email.md
+    - testimonial-request.md
+  data:
+    - investor-delivery-data-points.md
+    - compliance-trigger-table.md
+    - retention-offer-library.md

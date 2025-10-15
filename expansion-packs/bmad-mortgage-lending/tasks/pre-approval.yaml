@@ -1,0 +1,101 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/pre-approval.yaml
+name: pre-approval
+stage: pre-approval
+title: Pre-Approval Preparation Workflow
+description: |
+  Analyze borrower qualification data, gather required documentation, and deliver
+  a compliant pre-approval package aligned with LOS milestones.
+los_actions:
+  - Complete initial 1003 data entry
+  - Order and review credit report
+  - Generate and deliver pre-approval letter
+applicable_agents:
+  - loan-officer
+  - loan-processor
+  - marketing-assistant
+inputs:
+  borrower_profile:
+    description: Borrower application data including income, assets, liabilities, and declarations
+    required: true
+  supporting_documents:
+    description: Uploaded income/asset docs (W-2s, paystubs, bank statements)
+    required: true
+  credit_report:
+    description: Tri-merge credit report with scores and liabilities
+    required: true
+  aus_findings:
+    description: DU/LPA or other AUS recommendation details
+    required: false
+  target_product:
+    description: Proposed loan program(s)
+    required: true
+  approval_authority:
+    description: Branch manager or underwriting desk responsible for sign-off
+    required: false
+elicitation:
+  enabled: true
+  prompts:
+    - order: 1
+      question: "Do we have a complete 1003 borrower profile captured? Summarize any gaps."
+      capture: borrower_profile
+    - order: 2
+      question: "List the income and asset documents currently in the file."
+      capture: supporting_documents
+    - order: 3
+      question: "What credit score and liabilities are driving DTI today?"
+      capture: credit_report
+steps:
+  - number: 1
+    title: Validate LOS data completeness
+    los_action: Data verification
+    owner: loan-officer
+    checklist:
+      - borrower-intake-quality-checklist.md
+    description: |
+      1. Cross-check borrower_profile against los-field-mapping.md to confirm all mandatory 1003 fields are populated.
+      2. Identify missing disclosures or declarations and assign LOS tasks to borrower if necessary.
+      3. Update AUS inputs and rerun findings if any data materially changed.
+  - number: 2
+    title: Review documentation quality
+    los_action: Document review
+    owner: loan-processor
+    checklist:
+      - underwriting-submission-checklist.md
+    description: |
+      1. Compare supporting_documents against income/asset requirements using investor-delivery-data-points.md.
+      2. Flag any expired documents or unacceptable file formats for resubmission.
+      3. Log outstanding conditions into the LOS task queue and notify borrower using conditions-request-email.md when needed.
+  - number: 3
+    title: Assess qualification scenarios
+    los_action: Scenario analysis
+    owner: loan-officer
+    description: |
+      1. Evaluate target_product options with product-comparison-matrix.md to confirm best fit.
+      2. Stress test DTI/LTV/credit overlays and capture notes for underwriting.
+      3. Document compensating factors for any AUS Refer or Manual UW scenarios in borrower-profile.yaml output.
+  - number: 4
+    title: Prepare pre-approval deliverables
+    los_action: Pre-approval letter generation
+    owner: loan-officer
+    description: |
+      1. Draft borrower-facing summary using pre-approval-summary.md and include condition list.
+      2. Verify TRID timing requirements using trid-compliance-checklist.md when disclosing pre-approval terms.
+      3. Upload signed pre-approval letter to LOS, deliver to borrower, and CC referral partners using borrower-status-update.md.
+outputs:
+  - pre_approval_summary
+  - outstanding_conditions_list
+  - pre_approval_letter
+resources:
+  checklists:
+    - borrower-intake-quality-checklist.md
+    - underwriting-submission-checklist.md
+    - trid-compliance-checklist.md
+  templates:
+    - pre-approval-summary.md
+    - borrower-status-update.md
+    - conditions-request-email.md
+  data:
+    - los-field-mapping.md
+    - product-comparison-matrix.md
+    - investor-delivery-data-points.md

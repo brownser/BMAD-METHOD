@@ -1,0 +1,58 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/pricing-request.yaml
+name: pricing-request
+stage: pricing
+title: Wholesale Pricing Request Workflow
+description: |
+  Prepare and send a structured pricing request to wholesale partners such as
+  Rocket Pro TPO, ensuring borrower data integrity and compliance disclosures.
+los_actions:
+  - Assemble pricing scenario summary
+  - Submit request via lender portal or email
+  - Log pricing responses in LOS
+applicable_agents:
+  - loan-officer
+inputs:
+  borrower_profile:
+    description: Key borrower qualification data relevant to pricing
+    required: true
+  property_details:
+    description: Property type, occupancy, value, and loan amount
+    required: true
+  scenario_notes:
+    description: Lock preferences, concessions, or lender credits requested
+    required: false
+steps:
+  - number: 1
+    title: Confirm scenario accuracy
+    los_action: Data verification
+    owner: loan-officer
+    description: |
+      1. Validate borrower_profile inputs against los-field-mapping.md for pricing-critical fields.
+      2. Ensure property_details align with AUS findings and pre-approval targets.
+      3. Capture scenario_notes including lock duration and compensation structure.
+  - number: 2
+    title: Draft pricing request
+    los_action: Pricing request generation
+    owner: loan-officer
+    description: |
+      1. Populate rocket-pro-tpo-pricing-request-letter.md template with borrower_profile and property_details.
+      2. Attach supporting documents (credit, AUS, income summary) if required by lender.
+      3. Double-check contact information and licensing disclosures.
+  - number: 3
+    title: Submit and log response
+    los_action: Pricing response tracking
+    owner: loan-officer
+    description: |
+      1. Send request via lender portal/email and document confirmation number.
+      2. Log request details and expected response SLA in LOS pricing screen.
+      3. Set follow-up reminders to monitor response and escalate if delayed.
+outputs:
+  - pricing_request_document
+  - pricing_follow_up_tasks
+resources:
+  templates:
+    - rocket-pro-tpo-pricing-request-letter.md
+  data:
+    - los-field-mapping.md
+    - product-comparison-matrix.md

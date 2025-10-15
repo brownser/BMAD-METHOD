@@ -1,0 +1,61 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/adverse-action.yaml
+name: adverse-action
+stage: compliance
+title: Adverse Action Documentation Workflow
+description: |
+  Document the rationale for credit denial or withdrawal, generate compliant
+  adverse action notices, and coordinate delivery timelines.
+los_actions:
+  - Record adverse decision in LOS
+  - Generate adverse action letter
+  - Deliver disclosure to borrower within regulatory timelines
+applicable_agents:
+  - compliance-analyst
+  - loan-officer
+inputs:
+  adverse_reason_codes:
+    description: Primary and secondary denial reasons per ECOA/Reg B
+    required: true
+  credit_decision_date:
+    description: Date the adverse decision was made
+    required: true
+  borrower_contacts:
+    description: Borrower contact info and preferred delivery method
+    required: true
+  supporting_notes:
+    description: Narrative explaining underwriting decision
+    required: false
+steps:
+  - number: 1
+    title: Confirm decision data
+    los_action: Decision logging
+    owner: compliance-analyst
+    description: |
+      1. Verify adverse_reason_codes align with AUS/underwriter notes.
+      2. Update LOS adverse action module with credit_decision_date and decision type.
+      3. Ensure HMDA withdrawal/denial codes are updated accordingly.
+  - number: 2
+    title: Draft adverse action letter
+    los_action: Disclosure generation
+    owner: compliance-analyst
+    description: |
+      1. Populate adverse-action-letter.md with adverse_reason_codes and supporting_notes.
+      2. Include counteroffer options if applicable and compliance contact details.
+      3. Perform quality review using compliance-review-summary.md guidance.
+  - number: 3
+    title: Deliver disclosure and document
+    los_action: Disclosure delivery
+    owner: loan-officer
+    description: |
+      1. Send letter to borrower via preferred method and document proof of delivery.
+      2. Log borrower response or follow-up questions in LOS notes.
+      3. Close related tasks and notify referral partners as appropriate.
+outputs:
+  - adverse_action_letter
+  - adverse_action_audit_log
+resources:
+  templates:
+    - adverse-action-letter.md
+  data:
+    - compliance-trigger-table.md

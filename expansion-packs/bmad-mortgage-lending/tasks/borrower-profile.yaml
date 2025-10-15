@@ -1,0 +1,62 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/borrower-profile.yaml
+name: borrower-profile
+stage: pre-approval
+title: Borrower Profile Narrative Refresh
+description: |
+  Convert LOS data into a narrative summary highlighting borrower strengths,
+  risks, and documentation status for internal stakeholders.
+los_actions:
+  - Update borrower notes in LOS
+  - Share summary with team via internal comments
+applicable_agents:
+  - loan-officer
+  - loan-processor
+inputs:
+  borrower_profile:
+    description: Structured 1003 data set
+    required: true
+  aus_findings:
+    description: Latest AUS recommendation details
+    required: false
+  documentation_status:
+    description: Summary of collected and outstanding documents
+    required: true
+  risk_flags:
+    description: Known underwriting concerns or policy exceptions
+    required: false
+steps:
+  - number: 1
+    title: Synthesize borrower snapshot
+    los_action: Narrative creation
+    owner: loan-officer
+    description: |
+      1. Translate borrower_profile into concise story covering employment, income, assets, liabilities, property, and purpose.
+      2. Highlight borrower strengths and compensating factors in numbered bullets.
+      3. Document risk_flags with mitigation plans referencing compliance-trigger-table.md when relevant.
+  - number: 2
+    title: Align documentation status
+    los_action: Document tracking
+    owner: loan-processor
+    description: |
+      1. Cross-reference documentation_status with underwriting-submission-checklist.md to identify gaps.
+      2. Note documents pending receipt and responsible parties.
+      3. Add due dates and follow-up cadence to LOS tasks.
+  - number: 3
+    title: Publish summary
+    los_action: Internal communication
+    owner: loan-officer
+    description: |
+      1. Use borrower-status-update.md to circulate summary to team and referral partners when appropriate.
+      2. Upload narrative to LOS conversation log or eFolder.
+      3. Tag compliance analyst if risk_flags include regulatory triggers.
+outputs:
+  - borrower_profile_summary
+  - outstanding_documents_snapshot
+resources:
+  checklists:
+    - underwriting-submission-checklist.md
+  templates:
+    - borrower-status-update.md
+  data:
+    - compliance-trigger-table.md
