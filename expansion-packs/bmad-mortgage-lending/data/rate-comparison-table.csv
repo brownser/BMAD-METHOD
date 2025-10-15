@@ -1,0 +1,7 @@
+loan_program,term,apr,rate,points,lender_credits,lock_days,notes
+Conventional 30-Year Fixed,360,6.125,6.000,0.750,0,45,Standard conforming balance
+Conventional 15-Year Fixed,180,5.750,5.625,0.500,0,45,Faster amortization option
+FHA 30-Year Fixed,360,6.250,5.875,1.250,0,60,Includes upfront MIP; compare total payment
+VA 30-Year Fixed,360,6.000,5.875,0.500,0,45,No down payment; funding fee may apply
+Jumbo 30-Year Fixed,360,6.375,6.250,0.875,0,60,Requires 20% down; reserves verified
+Conventional 7/6 ARM,360,6.500,5.750,0.250,500,45,Adjusts annually after year 7
