@@ -1,0 +1,74 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/discovery-interview.yaml
+name: discovery-interview
+stage: cross-stage
+title: Mortgage Discovery Interview Prompts
+description: |
+  Guided question set for gathering borrower context, timelines, and financial
+  priorities before recommending mortgage solutions.
+los_actions:
+  - Conduct borrower conversation logging in LOS
+  - Update call notes and follow-up tasks
+applicable_agents:
+  - loan-officer
+  - loan-processor
+  - marketing-assistant
+inputs:
+  conversation_context:
+    description: Notes about where the borrower is in the journey
+    required: false
+elicitation:
+  enabled: true
+  prompts:
+    - order: 1
+      question: "What motivated the borrower to reach out today?"
+      capture: borrower_motivation
+    - order: 2
+      question: "What timeline are they targeting for purchase or refinance?"
+      capture: timeline_goal
+    - order: 3
+      question: "Describe their income sources and employment stability."
+      capture: income_snapshot
+    - order: 4
+      question: "What assets are available for down payment, reserves, or closing costs?"
+      capture: asset_snapshot
+    - order: 5
+      question: "Are there any credit events, debts, or obligations we should know about?"
+      capture: liability_snapshot
+    - order: 6
+      question: "What are their communication preferences and stakeholders involved?"
+      capture: communication_preferences
+steps:
+  - number: 1
+    title: Frame the conversation
+    los_action: Lead intake
+    owner: loan-officer
+    description: |
+      1. Review conversation_context and previous LOS notes.
+      2. Set expectations for the interview length and outcomes.
+      3. Obtain permission to collect and store financial data.
+  - number: 2
+    title: Capture financial snapshot
+    los_action: Data collection
+    owner: loan-officer
+    description: |
+      1. Work through elicitation prompts to document income, assets, liabilities, and timeline.
+      2. Highlight any missing documents and assign LOS follow-up tasks.
+      3. Update borrower_motivation and communication_preferences fields in the LOS CRM.
+  - number: 3
+    title: Summarize next steps
+    los_action: Task creation
+    owner: loan-officer
+    description: |
+      1. Recap qualifying summary and outstanding needs to borrower.
+      2. Create follow-up tasks for marketing or processing teams.
+      3. Email borrower a confirmation using borrower-status-update.md or lead-nurture-sequence.md as applicable.
+outputs:
+  - discovery_interview_notes
+  - follow_up_task_list
+resources:
+  templates:
+    - borrower-status-update.md
+    - lead-nurture-sequence.md
+  data:
+    - los-field-mapping.md

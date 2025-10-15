@@ -1,0 +1,101 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/lead-capture.yaml
+name: lead-capture
+stage: lead-intake
+title: Lead Capture & Intake Workflow
+description: |
+  Capture new mortgage inquiries, validate minimum data for LOS entry, and align
+  follow-up actions for both sales and marketing teams.
+los_actions:
+  - Capture lead in LOS CRM intake form
+  - Create borrower contact and assign milestone task
+  - Trigger marketing nurture automation
+applicable_agents:
+  - loan-officer
+  - marketing-assistant
+  - loan-processor
+inputs:
+  borrower_name:
+    description: Full name for the primary borrower
+    required: true
+  contact_details:
+    description: Preferred phone, email, and contact preferences
+    required: true
+  property_state:
+    description: State where the property is located or expected
+    required: false
+  lead_source:
+    description: Marketing or referral source attribution
+    required: true
+  referral_partner:
+    description: Partner contact details when applicable
+    required: false
+  product_interest:
+    description: Preferred loan programs or financing goals
+    required: false
+  notes:
+    description: Freeform notes or conversation highlights
+    required: false
+elicitation:
+  enabled: true
+  prompts:
+    - order: 1
+      question: "What is the borrower's full legal name?"
+      capture: borrower_name
+    - order: 2
+      question: "How can we reach them? Include phone, email, and best time to call."
+      capture: contact_details
+    - order: 3
+      question: "Where did this lead originate (referral partner, campaign, event)?"
+      capture: lead_source
+    - order: 4
+      question: "What financing goal or loan product are they exploring?"
+      capture: product_interest
+steps:
+  - number: 1
+    title: Initialize LOS intake record
+    los_action: Lead intake
+    owner: loan-officer
+    checklist:
+      - borrower-intake-quality-checklist.md
+    description: |
+      1. Search LOS CRM to ensure the contact does not already exist.
+      2. Create a new borrower contact and input borrower_name, contact_details, and lead_source.
+      3. Associate referral_partner and property_state fields when supplied.
+  - number: 2
+    title: Qualify baseline borrowing position
+    los_action: Lead qualification
+    owner: loan-officer
+    description: |
+      1. Ask discovery questions aligned with discovery-interview.yaml prompts.
+      2. Capture product_interest and high-level goals, logging notes in the LOS prospect screen.
+      3. Flag any urgent timelines or credit concerns for follow-up.
+  - number: 3
+    title: Route to marketing nurture
+    los_action: Campaign enrollment
+    owner: marketing-assistant
+    description: |
+      1. Select nurture track from retention-offer-library.md that matches product_interest and lead_source.
+      2. Enroll borrower into CRM automation and personalize first-touch message using lead-nurture-sequence.md.
+      3. Document scheduled outreach cadence in the LOS communication log.
+  - number: 4
+    title: Communicate intake summary
+    los_action: Referral partner update
+    owner: loan-officer
+    description: |
+      1. Draft partner update using borrower-status-update.md when referral_partner is provided.
+      2. Include captured data, next steps, and commitments with clear deadlines.
+      3. Upload communication record to LOS and share with internal team.
+outputs:
+  - lead_intake_summary
+  - crm_tasks_created
+  - nurture_sequence_personalized
+resources:
+  checklists:
+    - borrower-intake-quality-checklist.md
+  templates:
+    - lead-nurture-sequence.md
+    - borrower-status-update.md
+  data:
+    - los-field-mapping.md
+    - retention-offer-library.md

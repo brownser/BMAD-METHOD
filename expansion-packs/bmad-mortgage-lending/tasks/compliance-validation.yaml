@@ -1,0 +1,69 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/compliance-validation.yaml
+name: compliance-validation
+stage: compliance
+title: Compliance Data Validation Workflow
+description: |
+  Validate HMDA, fair lending, and anti-money laundering data within the LOS to
+  ensure accurate regulatory reporting prior to underwriting or funding.
+los_actions:
+  - Complete compliance checklist in LOS
+  - Update HMDA reporting fields
+  - Document compliance findings and remediation plan
+applicable_agents:
+  - compliance-analyst
+  - loan-processor
+inputs:
+  hmda_dataset:
+    description: LOS export of HMDA data fields for the loan
+    required: true
+  demographic_disclosures:
+    description: Borrower demographic and GMI responses
+    required: true
+  aml_flags:
+    description: Results of OFAC/AML screening
+    required: false
+  fee_summary:
+    description: Current fee itemization for TRID comparison
+    required: true
+steps:
+  - number: 1
+    title: Review HMDA completeness
+    los_action: HMDA validation
+    owner: compliance-analyst
+    checklist:
+      - fair-lending-variance-checklist.md
+    description: |
+      1. Compare hmda_dataset fields against los-field-mapping.md for mandatory data elements.
+      2. Confirm demographic_disclosures match borrower-provided responses.
+      3. Note missing or default values requiring updates and assign LOS tasks to responsible team members.
+  - number: 2
+    title: Evaluate fair lending metrics
+    los_action: Fair lending analysis
+    owner: compliance-analyst
+    description: |
+      1. Review pricing, fees, and rate lock terms relative to product-comparison-matrix.md benchmarks.
+      2. Document any disparities by demographic segments and propose mitigation steps.
+      3. Capture summary in compliance-review-summary.md for audit trail.
+  - number: 3
+    title: Confirm TRID & AML alignment
+    los_action: Compliance review
+    owner: compliance-analyst
+    checklist:
+      - trid-compliance-checklist.md
+    description: |
+      1. Reconcile fee_summary with Loan Estimate and Closing Disclosure draft for tolerance variances.
+      2. Ensure aml_flags (if present) are cleared with supporting documentation.
+      3. Escalate unresolved issues to compliance leadership with recommended actions.
+outputs:
+  - compliance_validation_report
+  - remediation_task_list
+resources:
+  checklists:
+    - fair-lending-variance-checklist.md
+    - trid-compliance-checklist.md
+  templates:
+    - compliance-review-summary.md
+  data:
+    - los-field-mapping.md
+    - product-comparison-matrix.md

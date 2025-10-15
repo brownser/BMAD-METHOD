@@ -1,0 +1,92 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/underwriting-submission.yaml
+name: underwriting-submission
+stage: underwriting
+title: Underwriting Submission Workflow
+description: |
+  Assemble a complete underwriting file, clear pre-submission conditions, and
+  communicate milestones for processor and loan officer coordination.
+los_actions:
+  - Assign and satisfy submission conditions
+  - Generate AUS/LOS submission package
+  - Deliver file to delegated or investor underwriting queue
+applicable_agents:
+  - loan-processor
+  - loan-officer
+inputs:
+  updated_1003:
+    description: Locked 1003 data set ready for underwriting
+    required: true
+  documentation_stack:
+    description: All borrower documents organized by category
+    required: true
+  appraisal_status:
+    description: Appraisal order and completion status
+    required: false
+  aus_findings:
+    description: Final AUS results with condition list
+    required: true
+  submission_type:
+    description: Delegated, non-delegated, or correspondent investor submission
+    required: true
+elicitation:
+  enabled: true
+  prompts:
+    - order: 1
+      question: "Confirm the underwriting submission type (delegated, non-delegated, correspondent)."
+      capture: submission_type
+    - order: 2
+      question: "List all critical documents included in the submission stack."
+      capture: documentation_stack
+steps:
+  - number: 1
+    title: Complete pre-submission audit
+    los_action: File audit
+    owner: loan-processor
+    checklist:
+      - underwriting-submission-checklist.md
+      - trid-compliance-checklist.md
+    description: |
+      1. Ensure updated_1003 matches supporting docs and AUS data using los-field-mapping.md.
+      2. Run trid-compliance-checklist.md to confirm fee accuracy and timing.
+      3. Verify appraisal_status, title, and insurance orders are in process and documented.
+  - number: 2
+    title: Clear outstanding conditions
+    los_action: Condition clearing
+    owner: loan-processor
+    description: |
+      1. Review AUS findings and convert open items into LOS tasks with owners and due dates.
+      2. Request missing documentation via conditions-request-email.md.
+      3. Update condition statuses and escalate blockers to loan officer and compliance analyst.
+  - number: 3
+    title: Generate underwriting submission package
+    los_action: Package generation
+    owner: loan-processor
+    description: |
+      1. Combine documentation_stack per investor-delivery-data-points.md stacking order.
+      2. Create submission summary cover letter using template underwriting-submission-cover.md.
+      3. Upload compiled package to LOS eFolder and lock file as "Ready for UW".
+  - number: 4
+    title: Communicate submission
+    los_action: Milestone update
+    owner: loan-officer
+    description: |
+      1. Notify borrower and referral partner with borrower-status-update.md summarizing submission timeline.
+      2. Log expected underwriting decision SLA in LOS pipeline notes.
+      3. Tag compliance analyst if state or product triggers are present using compliance-trigger-table.md.
+outputs:
+  - underwriting_submission_packet
+  - condition_tracking_log
+  - stakeholder_update_notes
+resources:
+  checklists:
+    - underwriting-submission-checklist.md
+    - trid-compliance-checklist.md
+  templates:
+    - underwriting-submission-cover.md
+    - borrower-status-update.md
+    - conditions-request-email.md
+  data:
+    - investor-delivery-data-points.md
+    - compliance-trigger-table.md
+    - los-field-mapping.md

@@ -1,0 +1,72 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/audit-response.yaml
+name: audit-response
+stage: compliance
+title: Audit Response Workflow
+description: |
+  Coordinate internal responses to investor, regulator, or quality control audit
+  findings with documented corrective actions and timelines.
+los_actions:
+  - Log audit finding in LOS/quality system
+  - Assign remediation tasks
+  - Deliver response packet to requesting party
+applicable_agents:
+  - compliance-analyst
+  - loan-processor
+inputs:
+  audit_request_details:
+    description: Summary of audit scope, findings, and due dates
+    required: true
+  impacted_loans:
+    description: List of loan numbers affected by the audit
+    required: true
+  requested_documents:
+    description: Documents or data requested for review
+    required: true
+  response_owner:
+    description: Primary contact responsible for response
+    required: true
+steps:
+  - number: 1
+    title: Analyze findings
+    los_action: Finding review
+    owner: compliance-analyst
+    description: |
+      1. Break down audit_request_details and categorize findings using compliance-trigger-table.md.
+      2. Determine severity and prioritize by due dates.
+      3. Create LOS tasks and assign response_owner plus supporting teammates.
+  - number: 2
+    title: Gather documentation
+    los_action: Document retrieval
+    owner: loan-processor
+    description: |
+      1. Collect requested_documents from LOS eFolder and settlement partners.
+      2. Validate documents for completeness with post-closing-audit-checklist.md.
+      3. Organize materials per investor-delivery-data-points.md format.
+  - number: 3
+    title: Draft response memo
+    los_action: Response creation
+    owner: compliance-analyst
+    description: |
+      1. Summarize findings, root causes, and corrective actions in compliance-review-summary.md.
+      2. Include supporting evidence references and completion timelines.
+      3. Obtain approvals from compliance leadership before delivery.
+  - number: 4
+    title: Deliver and track resolution
+    los_action: Resolution tracking
+    owner: compliance-analyst
+    description: |
+      1. Submit response to requesting party and log confirmation details.
+      2. Monitor remediation tasks until completion and document closure evidence.
+      3. Update lessons learned repository for process improvements.
+outputs:
+  - audit_response_packet
+  - remediation_tracking_log
+resources:
+  checklists:
+    - post-closing-audit-checklist.md
+  templates:
+    - compliance-review-summary.md
+  data:
+    - compliance-trigger-table.md
+    - investor-delivery-data-points.md

@@ -1,0 +1,95 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/closing-prep.yaml
+name: closing-prep
+stage: closing-preparation
+title: Closing Preparation Workflow
+description: |
+  Coordinate conditions clearing, closing disclosure review, and settlement
+  logistics to deliver a balanced, compliant closing package.
+los_actions:
+  - Generate Closing Disclosure
+  - Balance with settlement agent
+  - Issue clear-to-close and schedule signing
+applicable_agents:
+  - loan-processor
+  - compliance-analyst
+  - loan-officer
+inputs:
+  final_approval_conditions:
+    description: List of underwriting conditions and their status
+    required: true
+  closing_disclosure_draft:
+    description: Draft CD with fees and cash-to-close
+    required: true
+  settlement_agent_details:
+    description: Contact info and instructions from settlement/title company
+    required: true
+  funding_dates:
+    description: Target signing and funding dates
+    required: true
+  post_closing_requirements:
+    description: Investor or compliance items needed after funding
+    required: false
+elicitation:
+  enabled: true
+  prompts:
+    - order: 1
+      question: "What conditions remain prior to clear-to-close?"
+      capture: final_approval_conditions
+    - order: 2
+      question: "Provide the current Closing Disclosure fees and cash-to-close breakdown."
+      capture: closing_disclosure_draft
+    - order: 3
+      question: "Who is the settlement agent and what are their preferred communication details?"
+      capture: settlement_agent_details
+steps:
+  - number: 1
+    title: Track condition clearance
+    los_action: Condition tracking
+    owner: loan-processor
+    description: |
+      1. Reconcile final_approval_conditions against LOS tasks and update statuses.
+      2. Escalate any borrower outstanding items via conditions-request-email.md.
+      3. Coordinate with underwriting to obtain final sign-offs.
+  - number: 2
+    title: Perform TRID compliance review
+    los_action: Compliance check
+    owner: compliance-analyst
+    checklist:
+      - trid-compliance-checklist.md
+      - fair-lending-variance-checklist.md
+    description: |
+      1. Compare closing_disclosure_draft fees with Loan Estimate to assess tolerance cures.
+      2. Validate APR and finance charge calculations referencing compliance-review-summary.md guidance.
+      3. Document any redisclosure triggers using compliance-trigger-table.md and notify stakeholders.
+  - number: 3
+    title: Balance and schedule closing
+    los_action: Closing coordination
+    owner: loan-processor
+    description: |
+      1. Share fee worksheet with settlement agent and confirm wiring instructions using closing-package-email.md.
+      2. Align funding_dates with warehouse/funding desk requirements and schedule signing.
+      3. Update LOS milestones to "Clear to Close" and push notifications via borrower-status-update.md.
+  - number: 4
+    title: Prepare closing package
+    los_action: Document generation
+    owner: loan-processor
+    description: |
+      1. Compile final documents (note, deed, CD) following investor-delivery-data-points.md stacking order.
+      2. Review post_closing_requirements and add reminders to post-closing task list.
+      3. Store closing package in LOS eFolder and confirm access with settlement agent.
+outputs:
+  - clear_to_close_confirmation
+  - compliance_review_log
+  - scheduled_closing_details
+resources:
+  checklists:
+    - trid-compliance-checklist.md
+    - fair-lending-variance-checklist.md
+  templates:
+    - closing-package-email.md
+    - borrower-status-update.md
+  data:
+    - compliance-trigger-table.md
+    - investor-delivery-data-points.md
+    - los-field-mapping.md

@@ -1,0 +1,68 @@
+# <!-- Powered by BMAD™ Core -->
+# tasks/partner-campaign.yaml
+name: partner-campaign
+stage: marketing
+title: Referral Partner Campaign Workflow
+description: |
+  Plan and launch co-branded marketing campaigns with real estate or builder
+  partners aligned to current LOS pipeline milestones.
+los_actions:
+  - Capture campaign brief in LOS/CRM
+  - Generate marketing assets and approvals
+  - Schedule campaign delivery and follow-up
+applicable_agents:
+  - marketing-assistant
+  - loan-officer
+inputs:
+  partner_profile:
+    description: Partner name, contact info, and audience focus
+    required: true
+  campaign_goal:
+    description: Objective for the campaign (lead gen, update, event)
+    required: true
+  target_audience:
+    description: Segment to receive the campaign (borrowers, prospects, partners)
+    required: true
+  milestone_alignment:
+    description: LOS stage or event anchoring the campaign
+    required: false
+steps:
+  - number: 1
+    title: Define campaign strategy
+    los_action: Campaign planning
+    owner: marketing-assistant
+    description: |
+      1. Interview partner to clarify goals, offers, and compliance needs using discovery-interview.yaml prompts.
+      2. Document strategy in partner-campaign-brief.md.
+      3. Align milestone_alignment with LOS data to personalize messaging.
+  - number: 2
+    title: Draft creative assets
+    los_action: Asset creation
+    owner: marketing-assistant
+    checklist:
+      - marketing-compliance-checklist.md
+    description: |
+      1. Prepare copy and content calendar referencing lead-nurture-sequence.md and borrower-status-update.md templates.
+      2. Insert co-branding, licensing, and equal housing disclosures.
+      3. Route drafts to partner and compliance-analyst for approval.
+  - number: 3
+    title: Launch and monitor
+    los_action: Campaign execution
+    owner: marketing-assistant
+    description: |
+      1. Schedule sends/posts in CRM and track performance metrics.
+      2. Notify loan-officer of hot leads and add follow-up tasks to LOS pipeline.
+      3. Compile post-campaign report with key metrics and lessons learned.
+outputs:
+  - partner_campaign_brief
+  - campaign_asset_package
+  - performance_report
+resources:
+  checklists:
+    - marketing-compliance-checklist.md
+  templates:
+    - partner-campaign-brief.md
+    - lead-nurture-sequence.md
+    - borrower-status-update.md
+  data:
+    - retention-offer-library.md
