@@ -1,0 +1,11 @@
+# <!-- Powered by BMAD™ Core -->
+name: bmad-mortgage-lending
+version: 1.0.0
+short-title: Mortgage Lending Solo Broker
+description: >-
+  End-to-end mortgage origination toolkit for independent brokers managing
+  client acquisition, loan structuring, compliance, and closing without a
+  dedicated operations staff. Provides LOS-ready workflows, borrower-facing
+  templates, and automation cues tailored to one-person shops.
+author: Solo Broker Enablement Team
+slashPrefix: bmad-ml
