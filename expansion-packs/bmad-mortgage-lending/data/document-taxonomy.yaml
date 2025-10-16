@@ -1,0 +1,22 @@
+categories:
+  income:
+    - id: paystub
+      name: Paystub
+      description: 30 days of consecutive earnings statements
+    - id: voe
+      name: Verification of Employment
+      description: Written or verbal VOE per investor guidelines
+  assets:
+    - id: bank-statement
+      name: Bank Statement
+      description: 2 months full statements with all pages
+    - id: retirement
+      name: Retirement Statement
+      description: Most recent quarterly statement showing vested balance
+  property:
+    - id: appraisal
+      name: Appraisal Report
+      description: Full appraisal with photos and comparable analysis
+    - id: insurance
+      name: Hazard Insurance
+      description: Binder or declarations page listing lender as loss payee

@@ -1,0 +1,4 @@
+campaign_id,campaign_name,start_date,end_date,spend,leads,applications,funded_loans
+C-101,Q1 Purchase Push,2024-01-01,2024-03-31,15000,320,110,45
+C-102,Refi Reactivation,2024-02-01,2024-02-28,8000,180,60,25
+C-103,Builder Co-Marketing,2024-01-15,2024-03-15,12000,210,85,40

@@ -1,0 +1,6 @@
+role,name,company,email,phone
+Closing Specialist,Jamie Clark,ABC Mortgage,jclark@abcmortgage.com,555-555-0145
+Title Officer,Susan Lee,Premier Title,slee@premiertitle.com,555-555-0172
+Escrow Officer,Mark Diaz,Premier Title,mdiaz@premiertitle.com,555-555-0184
+Loan Officer,{{loan_officer_name}},{{company_name}},{{loan_officer_email}},{{loan_officer_phone}}
+Compliance Analyst,Avery Brooks,ABC Mortgage,abrooks@abcmortgage.com,555-555-0199

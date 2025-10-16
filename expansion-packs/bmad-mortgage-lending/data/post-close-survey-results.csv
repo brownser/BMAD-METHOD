@@ -1,0 +1,4 @@
+borrower_id,close_date,net_promoter_score,loan_officer_rating,comments
+B-1001,2024-01-05,10,5,"Loved the constant communication"
+B-1002,2024-01-08,8,4,"Process was smooth but paperwork heavy"
+B-1003,2024-01-12,9,5,"Appreciated the weekly updates"

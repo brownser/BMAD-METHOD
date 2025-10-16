@@ -1,0 +1,17 @@
+requirements:
+  - disclosure: Loan Estimate
+    trigger: Loan application (6 pieces of information)
+    timing: Within 3 business days of application
+    delivery_methods: [e-delivery, mail, in-person]
+  - disclosure: Intent to Proceed Confirmation
+    trigger: Borrower elects to move forward after LE
+    timing: Before collecting fees beyond credit report
+    delivery_methods: [e-sign, recorded verbal]
+  - disclosure: Closing Disclosure
+    trigger: Final loan terms ready
+    timing: 3 business days before consummation
+    delivery_methods: [e-delivery, mail]
+  - disclosure: Adverse Action Notice
+    trigger: Loan denied or withdrawn after adverse decision
+    timing: Within 30 days of decision
+    delivery_methods: [mail, secure email]

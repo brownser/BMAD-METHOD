@@ -1,0 +1,59 @@
+# <!-- Powered by BMAD™ Core -->
+---
+template:
+  id: borrower-intake-form
+  name: Borrower Intake Form
+  version: 1.0
+  description: Structured questionnaire for capturing borrower goals and profile information.
+  output:
+    format: markdown
+    filename: "{{primary_borrower_last}}-intake-notes.md"
+
+workflow:
+  elicitation: true
+  allow_skip: false
+
+sections:
+  - id: borrower-overview
+    title: Borrower Overview
+    instruction: |
+      Collect borrower identity details:
+      - Primary and co-borrower names (as on ID)
+      - Preferred pronouns and communication channels
+      - Referral source and relationship notes
+      - Consent confirmations (recording, credit pull)
+  - id: property-goals
+    title: Property Goals
+    instruction: |
+      Capture purchase or refinance objectives:
+      - Purpose (purchase, refinance, cash-out, construction)
+      - Property type, occupancy, and estimated price/value
+      - Desired timeline for contract/closing
+      - Special requirements (renovation, multi-unit, relocation)
+    elicit: true
+  - id: financial-profile
+    title: Financial Profile Snapshot
+    instruction: |
+      Document current financial situation:
+      - Employment status for each borrower
+      - Income sources and variability
+      - Assets and reserves available for transaction
+      - Existing liabilities and estimated credit score band
+    elicit: true
+  - id: risk-considerations
+    title: Risk & Readiness Considerations
+    instruction: |
+      Identify potential hurdles early:
+      - Prior bankruptcies, foreclosures, or late payments
+      - Citizenship/residency factors
+      - Self-employed or non-traditional income documentation
+      - Down payment sourcing and gift funds
+  - id: next-steps
+    title: Next Steps & Expectations
+    instruction: |
+      Confirm commitments and follow-up:
+      - Documents borrower will provide and target dates
+      - Scheduled appointments and communication cadence
+      - Summary of questions to clarify with processing/compliance
+      - Borrower sentiment and confidence level
+    elicit: true

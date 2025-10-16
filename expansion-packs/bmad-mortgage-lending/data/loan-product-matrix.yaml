@@ -1,0 +1,32 @@
+# Loan Product Matrix (Sample)
+products:
+  - id: conv-30-fixed
+    name: Conventional 30-Year Fixed
+    eligibility:
+      min_credit_score: 620
+      max_dti: 45
+      max_ltv: 97
+      occupancy: [primary, secondary]
+    highlights:
+      - Stable payment
+      - Works with low down payment options
+  - id: fha-30-fixed
+    name: FHA 30-Year Fixed
+    eligibility:
+      min_credit_score: 580
+      max_dti: 50
+      max_ltv: 96.5
+      occupancy: [primary]
+    highlights:
+      - Flexible credit guidelines
+      - Upfront and monthly MIP applies
+  - id: jumbo-30-fixed
+    name: Jumbo 30-Year Fixed
+    eligibility:
+      min_credit_score: 700
+      max_dti: 43
+      max_ltv: 90
+      occupancy: [primary, secondary]
+    highlights:
+      - Competitive pricing for high loan amounts
+      - Strong reserves required

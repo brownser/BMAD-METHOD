@@ -1,0 +1,6 @@
+program,rate,apr,price,lock_days
+Conventional 30 Fixed,6.500,6.612,100.125,30
+Conventional 15 Fixed,5.875,6.021,100.500,30
+FHA 30 Fixed,6.250,7.104,101.250,30
+VA 30 Fixed,6.375,6.569,100.750,45
+Jumbo 30 Fixed,6.750,6.861,99.750,60

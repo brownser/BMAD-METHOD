@@ -1,0 +1,12 @@
+hmda_field,los_field,notes
+Loan Identifier,Loan Number,Unique loan ID from LOS
+Action Taken,Decision Status,Use HMDA codes 1-8
+Action Taken Date,Decision Date,Format YYYY-MM-DD
+Loan Purpose,Loan Purpose,Map purchase/refinance/improvement
+Occupancy Type,Occupancy,Primary/Second Home/Investment
+Loan Amount,Base Loan Amount,Exclude financed MI
+Applicant Ethnicity,Demographic Section,Collect per HMDA standards
+Applicant Race,Demographic Section,Collect per HMDA standards
+Applicant Sex,Demographic Section,Collect per HMDA standards
+Property State,Property Address State,Two-letter postal code
+Census Tract,Census Data,Use geocoding tool results

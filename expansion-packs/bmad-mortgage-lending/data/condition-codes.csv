@@ -1,0 +1,8 @@
+code,description,severity
+PTC-VOE,Provide updated verification of employment,Critical
+PTC-VOI,Verify income documentation,High
+PTC-APP,Appraisal review required,High
+PTC-INS,Proof of hazard insurance,Medium
+PTC-LOE,Letter of explanation for credit inquiry,Medium
+PTC-FUND,Gift funds verification,Medium
+PTC-MISC,Additional documentation requested,Low

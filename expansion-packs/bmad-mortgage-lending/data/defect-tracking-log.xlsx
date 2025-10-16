@@ -1,0 +1,3 @@
+Defect ID,Date Identified,Severity,Description,Root Cause,Owner,Target Resolution,Status
+DF-001,2024-01-10,Critical,Missing CD acknowledgment,Disclosure timing,Compliance Team,2024-01-20,In Progress
+DF-002,2024-01-15,Major,Incorrect HMDA action code,Data entry,Lending Ops,2024-01-25,Resolved

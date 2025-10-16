@@ -1,0 +1,28 @@
+{
+  "documents": [
+    {
+      "id": "w2",
+      "name": "W-2 (most recent 2 years)",
+      "applicable_programs": ["conv-30-fixed", "fha-30-fixed"],
+      "notes": "Required for salaried borrowers"
+    },
+    {
+      "id": "tax-returns",
+      "name": "Full Tax Returns",
+      "applicable_programs": ["conv-30-fixed", "fha-30-fixed", "jumbo-30-fixed"],
+      "notes": "Needed for self-employed or >25% business ownership"
+    },
+    {
+      "id": "bank-stmt",
+      "name": "Bank Statements (2 months)",
+      "applicable_programs": ["conv-30-fixed", "fha-30-fixed", "jumbo-30-fixed"],
+      "notes": "Show source of funds and reserves"
+    },
+    {
+      "id": "gift-letter",
+      "name": "Gift Letter",
+      "applicable_programs": ["fha-30-fixed"],
+      "notes": "Include donor info and transfer evidence"
+    }
+  ]
+}

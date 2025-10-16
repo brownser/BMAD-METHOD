@@ -1,0 +1,8 @@
+code,description,next_recommended_action
+NEW-UNREACHED,Initial outreach attempted,Schedule follow-up call in 24h
+CONTACTED-SCHEDULED,Intake appointment scheduled,Send calendar invite and prep materials
+CONTACTED-NO-RESPONSE,Awaiting borrower reply,Send reminder via preferred channel
+QUALIFIED-APPLICATION,Application started,Confirm document checklist delivered
+ON-HOLD,Borrower delaying process,Set monthly nurture touch and note reason
+DECLINED,Loan not moving forward,Send compliance adverse action notice
+CLOSED-FUNDED,Loan funded,Trigger post-close nurture and testimonial request

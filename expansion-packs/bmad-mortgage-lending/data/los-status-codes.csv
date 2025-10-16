@@ -1,0 +1,11 @@
+code,description
+INTAKE,Loan officer working intake items
+PROCESSING,Processor managing documentation
+UW-SUBMITTED,Submitted to underwriting
+UW-APPROVED,Conditional approval received
+CTC,Clear to close granted
+CLOSING,Closing scheduled and docs out
+FUNDED,Loan funded and disbursed
+SUSPENDED,Temporarily on hold
+WITHDRAWN,Borrower withdrew application
+DECLINED,Adverse action issued

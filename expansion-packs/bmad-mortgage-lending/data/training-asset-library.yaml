@@ -1,0 +1,17 @@
+assets:
+  - id: trid-overview
+    title: TRID Essentials Webinar
+    format: video
+    duration_minutes: 45
+    owner: compliance
+    link: https://intranet.example.com/trid-essentials
+  - id: hmda-job-aid
+    title: HMDA Data Entry Job Aid
+    format: pdf
+    owner: compliance
+    link: https://intranet.example.com/hmda-job-aid
+  - id: los-navigation
+    title: LOS Navigation Guide
+    format: pdf
+    owner: lending-operations
+    link: https://intranet.example.com/los-navigation

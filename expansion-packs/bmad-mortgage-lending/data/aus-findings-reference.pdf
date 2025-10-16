@@ -1,0 +1,14 @@
+Automated Underwriting Findings Reference
+=========================================
+
+Key Statuses:
+- Approve/Eligible: Submit with standard documentation.
+- Approve/Ineligible: Review specific ineligibility reason; escalate to underwriting.
+- Refer/Caution: Manual underwrite required; gather compensating factors.
+- Out of Scope: Program not supported; consider alternative product.
+
+Common Messages & Actions:
+- Income Documentation Required: Provide full tax returns or VOE per AUS notes.
+- Assets Verification: Ensure large deposits sourced and documented.
+- Property Appraisal Required: Order appraisal per investor standards.
+- Credit Liabilities: Update LOS with accurate balances and re-run AUS.

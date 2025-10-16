@@ -1,0 +1,10 @@
+Column,Description
+Disclosure Type,LE/CD/Re-disclosure being reviewed
+Field,Specific fee or term assessed
+Expected Value,Value from LOS or baseline
+Actual Value,Value disclosed to borrower
+Variance,Positive/Negative difference with tolerance note
+Resolution Status,Open/Cured/Escalated
+Owner,Responsible teammate
+Due Date,Target completion
+Notes,Supporting details and document references
