@@ -30,6 +30,10 @@ Identify what behavior changed compared to the previous version: output, side ef
 
 Treat broad-impact changes as behavioral even when no single changed line looks important: dependency, toolchain, build/config, data-file, etc.
 
+Seek verification of behavior, not the literal text of implementation or documentation artifacts. Exact content or structure remains eligible when it is output produced by deterministic construction or transformation, including generated prompts and request payloads. Do not seek phrase-existence assertions over hand-authored prompts, skills, documents, or source files.
+
+For LLM-backed behavior, stop at the inference boundary: do not require invoking a model or judging its semantic response. Deterministic request construction and response handling remain eligible without live inference; existing inference tests are not precedent for more.
+
 ### Step 3: Trace where that behavior is used
 
 Trace the changed behavior to the places that observe it. Start with direct callers and registered entry points (routes, commands, DI), contract consumers (schemas, events, APIs, database readers), and reverse-dependency info if already available.
