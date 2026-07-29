@@ -236,9 +236,29 @@ try {
 
   test('review layers materialize as invocation blocks in step-04', () => {
     const content = readRendered('step-04-review.md');
+    const expectedPromptPath = `${skillDst.replaceAll('\\', '/')}/review-prompts/adversarial.md`;
     assert(content.includes('#### Blind Hunter'), 'default review layer not rendered as a #### invocation block');
     assert(!content.includes('- id:'), 'layer table data leaked into the rendered output');
+    assert(content.includes(expectedPromptPath), 'reviewer prompt path was not expanded to the absolute skill path');
+    assert(!content.includes('{skill-root}'), '{skill-root} survived in rendered review instructions');
     assert(content.includes('{diff_output}'), 'runtime {diff_output} placeholder did not survive rendering');
+    // Diff is plain text after "Review content:", not trapped under a blockquote.
+    assert(content.includes('Review content:\n\n{diff_output}'), 'review content + diff not laid out as plain multi-line text');
+    assert(!content.includes('> {diff_output}'), '{diff_output} still blockquote-prefixed');
+    assert(!content.includes('{review_content}'), 'rendered review layers still reference a {review_content} file slot');
+  });
+
+  test('one-shot review layers use direct child file loading after rendering', () => {
+    const content = readRendered('step-oneshot.md');
+    const expectedPromptPath = `${skillDst.replaceAll('\\', '/')}/review-prompts/adversarial.md`;
+    assert(content.includes(expectedPromptPath), 'one-shot reviewer prompt path was not expanded to the absolute skill path');
+    assert(!content.includes('{skill-root}'), '{skill-root} survived in rendered one-shot review instructions');
+    assert(
+      content.includes('Review content: the changed files in the current worktree.'),
+      'one-shot review target is no longer the changed files in the current worktree',
+    );
+    assert(!content.includes('{review_content}'), 'one-shot layers still reference a {review_content} file slot');
+    assert(content.includes('Do not invoke any skill.'), 'one-shot reviewer may invoke another skill');
   });
 
   test('review layer override replaces the matching default by id', () => {

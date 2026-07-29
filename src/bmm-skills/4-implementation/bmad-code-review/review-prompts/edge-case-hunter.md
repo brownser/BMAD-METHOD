@@ -19,7 +19,7 @@ A brief secondary deletion check runs as Step 4 when the diff removes code.
 
 ### Step 1: Receive Content
 
-- Load the content to review strictly from provided input
+- Load the content to review strictly from the parent message that launched you (not from this instruction file)
 - If content is empty, or cannot be decoded as text, return `[{"location":"N/A","trigger_condition":"Input empty or undecodable","guard_snippet":"Provide valid content to review","potential_consequence":"Review skipped — no analysis performed"}]` and stop
 - Identify content type (diff, full file, or function) to determine scope rules
 
@@ -83,8 +83,6 @@ For a deletion finding the standard fields read as: `location` = the removed ite
 Add nothing if nothing qualifies.
 </reference>
 
-## PROVIDED INPUTS
+## CONTENT SOURCE
 
-**content:**
-
-{review_content}
+Load the review target from the parent message, or from a trailing `## REVIEW TARGET` section if present (offline fallback). This file has no `{review_content}` slot. If neither supplies content, treat content as empty and follow the empty-content halt rules above.

@@ -13,7 +13,7 @@
 
 ### Step 1: Receive Content
 
-- Load the content to review from provided input or context
+- Load the content to review from the parent message that launched you (not from this instruction file)
 - If content to review is empty, ask for clarification and abort
 - Identify content type (diff, branch, uncommitted changes, document, etc.)
 
@@ -30,8 +30,7 @@ Output findings as a Markdown list: descriptions only, no severity, priority, or
 
 - HALT if zero findings — this is suspicious, re-analyze or ask for guidance
 - HALT if content is empty or unreadable
-## PROVIDED INPUTS
 
-**content:**
+## CONTENT SOURCE
 
-{review_content}
+Load the review target from the parent message, or from a trailing `## REVIEW TARGET` section if present (offline fallback). This file has no `{review_content}` slot. If neither supplies content, treat content as empty and follow the empty-content halt rules above.
