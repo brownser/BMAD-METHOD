@@ -3616,13 +3616,13 @@ async function runTests() {
   console.log('');
 
   // ============================================================
-  // Test Suite 49: dev-auto renderer installation surface
+  // Test Suite 49: build-auto renderer installation surface
   // ============================================================
-  console.log(`${colors.yellow}Test Suite 49: dev-auto renderer installation surface${colors.reset}\n`);
+  console.log(`${colors.yellow}Test Suite 49: build-auto renderer installation surface${colors.reset}\n`);
 
   let root49;
   try {
-    root49 = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-dev-auto-install-'));
+    root49 = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-build-auto-install-'));
     const { UI } = require('../tools/installer/ui');
     const partialConfig49 = await new UI().collectModuleConfigs(root49, ['core', 'bmm'], {
       yes: true,
@@ -3665,21 +3665,21 @@ async function runTests() {
     await installer49.generateModuleConfigs(bmadDir49, { core: { communication_language: 'English' }, bmm: {} });
 
     const scripts49 = path.join(bmadDir49, 'scripts');
-    const skill49 = path.join(bmadDir49, 'bmm', '4-implementation', 'bmad-dev-auto');
+    const skill49 = path.join(bmadDir49, 'bmm', '4-implementation', 'bmad-build-auto');
     assert(await fs.pathExists(path.join(scripts49, 'render_skill.py')), 'shared render_skill.py reaches installed _bmad/scripts');
     assert(await fs.pathExists(path.join(scripts49, 'config_utils.py')), 'shared config utility reaches installed _bmad/scripts');
     assert(!(await fs.pathExists(path.join(scripts49, 'tests'))), 'shared-script development tests are excluded from install');
     assert(!(await fs.pathExists(path.join(scripts49, '__pycache__'))), 'shared-script Python caches are excluded from install');
-    assert(await fs.pathExists(path.join(skill49, 'SKILL.md')), 'dev-auto entry reaches installed skill surface');
+    assert(await fs.pathExists(path.join(skill49, 'SKILL.md')), 'build-auto entry reaches installed skill surface');
     const skillSource49 = await fs.readFile(path.join(skill49, 'SKILL.md'), 'utf8');
     assert(
       skillSource49.includes('uv run --no-cache "{project-root}/_bmad/scripts/render_skill.py"'),
-      'dev-auto avoids the user-level uv cache and lets script metadata select Python',
+      'build-auto avoids the user-level uv cache and lets script metadata select Python',
     );
-    assert(!skillSource49.includes('uv run --python'), 'dev-auto does not pin an exact Python series');
+    assert(!skillSource49.includes('uv run --python'), 'build-auto does not pin an exact Python series');
     assert(!(await fs.pathExists(path.join(skill49, 'render.toml'))), 'installed skill has no duplicate render contract');
-    assert(await fs.pathExists(path.join(skill49, 'workflow.md')), 'dev-auto workflow source reaches installed skill surface');
-    assert(await fs.pathExists(path.join(skill49, 'step-04-review.md')), 'dev-auto step sources reach installed skill surface');
+    assert(await fs.pathExists(path.join(skill49, 'workflow.md')), 'build-auto workflow source reaches installed skill surface');
+    assert(await fs.pathExists(path.join(skill49, 'step-04-review.md')), 'build-auto step sources reach installed skill surface');
     assert(
       (await fs.readFile(renderGitignore49, 'utf8')) === '*\n!.gitignore\n',
       'generated render snapshots are ignored by installed projects',
@@ -3709,7 +3709,7 @@ async function runTests() {
     const dispatch49 = render49.stdout.trim().replace(/^read and follow /, '');
     assert(
       render49.status === 0 && path.isAbsolute(dispatch49) && (await fs.pathExists(dispatch49)),
-      'installer-produced dev-auto tree renders and dispatches end to end',
+      'installer-produced build-auto tree renders and dispatches end to end',
       `${render49.stdout}${render49.stderr}`,
     );
     const resolveCustomization49 = spawnSync(
