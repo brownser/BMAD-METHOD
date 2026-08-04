@@ -3866,6 +3866,281 @@ async function runTests() {
   console.log('');
 
   // ============================================================
+  // Test Suite 51: directory prompt returns the path on screen
+  // ============================================================
+  console.log(`${colors.yellow}Test Suite 51: directory prompt returns the path on screen${colors.reset}\n`);
+
+  let root51;
+  try {
+    const prompts = require('../tools/installer/prompts');
+    const { PassThrough } = require('node:stream');
+
+    // Fixture: a directory with children. The old autocomplete prompt returned
+    // a focused child instead of the typed path; the prompt is now a plain text
+    // entry, so no keystroke may ever change the value away from what is typed.
+    root51 = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-dirprompt-'));
+    const parent51 = path.join(root51, 'workspace');
+    for (const child of ['alpha', 'repos', 'zulu']) {
+      await fs.ensureDir(path.join(parent51, child));
+    }
+
+    /**
+     * Drive the directory prompt with a scripted key sequence.
+     * @param {Array<string>} script - 'type:<text>' or a key name from `keys` below
+     */
+    const drivePrompt = async (script) => {
+      const input = new PassThrough();
+      input.isTTY = true;
+      input.setRawMode = () => {};
+      const output = new PassThrough();
+      output.isTTY = true;
+      output.columns = 120;
+      output.rows = 40;
+      output.resume();
+
+      // Escape sequences are written as \u001B so they stay visible in a diff.
+      const ESC51 = '\u001B';
+      const keys = {
+        up: ESC51 + '[A',
+        down: ESC51 + '[B',
+        left: ESC51 + '[D',
+        right: ESC51 + '[C',
+        tab: '\t',
+        shiftTab: ESC51 + '[Z',
+        backspace: String.fromCodePoint(127),
+        // ctrl+u — clears the pre-filled default so a script can type its own path
+        clear: String.fromCodePoint(21),
+      };
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      const pending = prompts.directory({
+        message: 'Installation directory:',
+        default: root51,
+        input,
+        output,
+        validate: () => {},
+      });
+
+      await sleep(120);
+      for (const step of script) {
+        if (step.startsWith('type:')) {
+          for (const char of step.slice(5)) {
+            input.write(char);
+            await sleep(6);
+          }
+        } else {
+          input.write(keys[step]);
+        }
+        await sleep(40);
+      }
+      await sleep(80);
+      input.write('\r');
+      return pending;
+    };
+
+    // The line arrives pre-filled with the default, so Enter alone accepts it
+    // and appending extends it — no retyping to install one level down.
+    const untouched51 = await drivePrompt([]);
+    assert(untouched51 === root51, 'the input line is pre-filled with the default directory');
+
+    const extended51 = await drivePrompt(['type:/workspace']);
+    assert(extended51 === parent51, 'typing extends the pre-filled path instead of replacing it');
+
+    const trimmed51 = await drivePrompt(Array.from({ length: path.basename(root51).length + 1 }, () => 'backspace'));
+    assert(trimmed51 === path.dirname(root51), 'backspacing trims the pre-filled path');
+
+    const typed51 = await drivePrompt(['clear', `type:${parent51}`]);
+    assert(typed51 === parent51, 'typed path is returned verbatim');
+
+    const cleared51 = await drivePrompt(['clear']);
+    assert(cleared51 === root51, 'clearing the line and pressing enter still accepts the default');
+
+    // The original defect: a directory prompt that returned something other
+    // than the text on screen. No navigation key may move the value.
+    for (const key of ['down', 'up', 'tab', 'shiftTab']) {
+      const pressed51 = await drivePrompt(['clear', `type:${parent51}`, key]);
+      assert(pressed51 === parent51, `${key} does not change the typed path`);
+    }
+
+    // Editing mid-line must not splice text into the value.
+    const cursorEdited51 = await drivePrompt(['clear', `type:${parent51}`, 'left', 'left', 'left', 'down', 'up']);
+    assert(cursorEdited51 === parent51, 'moving the cursor and pressing arrows leaves the typed path intact');
+
+    const backspaced51 = await drivePrompt([
+      'clear',
+      `type:${path.join(parent51, 'rep')}`,
+      ...Array.from({ length: 4 }, () => 'backspace'),
+    ]);
+    assert(backspaced51 === parent51, 'backspacing back to the parent returns the parent, not a child');
+
+    const relative51 = await drivePrompt(['clear', 'type:~']);
+    assert(relative51 === os.homedir(), 'tilde input expands to the home directory');
+
+    const created51 = await drivePrompt(['clear', `type:${path.join(parent51, 'brand-new')}`]);
+    assert(created51 === path.join(parent51, 'brand-new'), 'a not-yet-created path is returned as typed');
+
+    // The prompt is a bare text entry: no candidate list, no key hints.
+    const renderProbe51 = new PassThrough();
+    renderProbe51.isTTY = true;
+    renderProbe51.setRawMode = () => {};
+    const renderOut51 = new PassThrough();
+    renderOut51.isTTY = true;
+    renderOut51.columns = 120;
+    renderOut51.rows = 40;
+    let frames51 = '';
+    renderOut51.on('data', (chunk) => {
+      frames51 += chunk.toString();
+    });
+    const renderPending51 = prompts.directory({
+      message: 'Installation directory:',
+      default: root51,
+      input: renderProbe51,
+      output: renderOut51,
+      validate: () => {},
+    });
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    for (const char of '/workspace') renderProbe51.write(char);
+    await new Promise((resolve) => setTimeout(resolve, 120));
+    renderProbe51.write('\r');
+    await renderPending51;
+
+    assert(!frames51.includes('use this directory'), 'the prompt renders no candidate list');
+    assert(!frames51.includes('browse'), 'the prompt renders no navigation hint line');
+    assert(!frames51.includes('alpha'), 'the prompt does not list sibling directories');
+  } catch (error) {
+    console.log(`${colors.red}Test Suite 51 setup failed: ${error.message}${colors.reset}`);
+    console.log(error.stack);
+    failed++;
+  } finally {
+    if (root51) await fs.remove(root51).catch(() => {});
+  }
+
+  console.log('');
+
+  // ============================================================
+  // Test Suite 52: module registry — order and WDS deprecation
+  // ============================================================
+  console.log(`${colors.yellow}Test Suite 52: module registry — order and WDS deprecation${colors.reset}\n`);
+
+  try {
+    const { ExternalModuleManager } = require('../tools/installer/modules/external-manager');
+    const { UI } = require('../tools/installer/ui');
+    const prompts = require('../tools/installer/prompts');
+    const registry52 = await new ExternalModuleManager().listAvailable();
+
+    // The picker renders built-in core/bmm first, then registry entries in
+    // registry order, so the registry sequence is the display sequence.
+    const activeOrder52 = registry52.filter((mod) => !mod.builtIn && !mod.deprecated).map((mod) => mod.code);
+    assert(
+      JSON.stringify(activeOrder52.slice(0, 4)) === JSON.stringify(['bmb', 'cis', 'tea', 'bmad-loop']),
+      'registry lists bmb, cis, tea, bmad-loop in that order (bmm is built-in and precedes them)',
+      `got: ${activeOrder52.join(', ')}`,
+    );
+
+    const wds52 = registry52.find((mod) => mod.code === 'wds');
+    assert(wds52 !== undefined, 'wds stays in the registry so existing installs still resolve a source');
+    assert(wds52 && wds52.deprecated === true, 'wds is marked deprecated');
+    assert(wds52 && wds52.defaultSelected === false, 'wds is never selected by default');
+    assert(
+      wds52 && /no longer receiving updates/i.test(wds52.deprecationMessage || ''),
+      'wds deprecation message states it is not receiving updates',
+    );
+    assert(wds52 && /bmm/i.test(wds52.deprecationMessage || ''), 'wds deprecation message points at bmm as the replacement');
+    assert(
+      wds52 && Boolean(wds52.url) && Boolean(wds52.moduleDefinition),
+      'wds keeps its source so an installed copy can still be updated',
+    );
+
+    // Picker visibility: hidden for new users, visible for existing installs.
+    // Mirrors the filter in UI._selectOfficialModules.
+    const visibleFor52 = (installed) =>
+      registry52.filter((mod) => !mod.builtIn && (!mod.deprecated || installed.has(mod.code))).map((mod) => mod.code);
+    assert(!visibleFor52(new Set()).includes('wds'), 'wds is hidden from the picker on a fresh install');
+    assert(visibleFor52(new Set(['wds'])).includes('wds'), 'wds stays visible in the picker when already installed');
+
+    // Deprecation notice reaches the non-interactive paths.
+    const warnings52 = [];
+    const originalWarn52 = prompts.log.warn;
+    prompts.log.warn = async (message) => warnings52.push(message);
+    let warned52;
+    try {
+      warned52 = await new UI()._warnDeprecatedModules(['core', 'bmm', 'wds']);
+    } finally {
+      prompts.log.warn = originalWarn52;
+    }
+    assert(warned52.includes('wds'), '_warnDeprecatedModules reports wds when it is part of the selection');
+    assert(
+      warnings52.some((message) => message.includes('wds') && /no longer receiving updates/i.test(message)),
+      'the wds deprecation notice is logged for --modules / --yes installs',
+    );
+
+    const warnedClean52 = await new UI()._warnDeprecatedModules(['core', 'bmm', 'bmb']);
+    assert(warnedClean52.length === 0, 'no deprecation notice for a selection of supported modules');
+
+    // core is a dependency of every module — it is never offered as a row,
+    // but it is always part of the result.
+    const originalOfficial52 = OfficialModules.prototype.listAvailable;
+    const originalExternal52 = ExternalModuleManager.prototype.listAvailable;
+    const originalAutocomplete52 = prompts.autocompleteMultiselect;
+    const originalSpinner52 = prompts.spinner;
+    const originalMessage52 = prompts.log.message;
+
+    let pickerOptions52 = [];
+    let pickerRequired52;
+    let pickerLocked52;
+    let summary52 = '';
+    OfficialModules.prototype.listAvailable = async () => ({
+      modules: [
+        { id: 'core', name: 'BMad Core Module', description: 'always installed', defaultSelected: true },
+        { id: 'bmm', name: 'BMad Method', description: 'the method', defaultSelected: true },
+      ],
+    });
+    ExternalModuleManager.prototype.listAvailable = async () => [];
+    prompts.spinner = async () => ({ start() {}, stop() {}, error() {} });
+    prompts.log.message = async (message) => {
+      summary52 = message;
+    };
+
+    try {
+      prompts.autocompleteMultiselect = async (opts) => {
+        pickerOptions52 = opts.options.map((opt) => opt.value);
+        pickerRequired52 = opts.required;
+        pickerLocked52 = opts.lockedValues;
+        return ['bmm'];
+      };
+      const picked52 = await new UI()._selectOfficialModules(new Set(), new Map(), null);
+
+      assert(!pickerOptions52.includes('core'), 'core is not shown as a row in the official module picker');
+      assert(pickerOptions52.includes('bmm'), 'other built-in modules are still shown in the picker');
+      assert(pickerLocked52 === undefined, 'no locked always-on row remains in the picker');
+      assert(picked52.includes('core'), 'core is still returned from the picker so it always installs');
+      assert(picked52.includes('bmm'), 'the user selection is preserved alongside core');
+      assert(!summary52.includes('BMad Core Module'), 'the selection summary does not list core');
+
+      // Selecting nothing is a valid core-only install, not a validation error.
+      prompts.autocompleteMultiselect = async (opts) => {
+        pickerRequired52 = opts.required;
+        return [];
+      };
+      const coreOnly52 = await new UI()._selectOfficialModules(new Set(), new Map(), null);
+      assert(pickerRequired52 === false, 'the picker no longer requires a selection now that core is implicit');
+      assert(JSON.stringify(coreOnly52) === JSON.stringify(['core']), 'selecting nothing yields a core-only install');
+    } finally {
+      OfficialModules.prototype.listAvailable = originalOfficial52;
+      ExternalModuleManager.prototype.listAvailable = originalExternal52;
+      prompts.autocompleteMultiselect = originalAutocomplete52;
+      prompts.spinner = originalSpinner52;
+      prompts.log.message = originalMessage52;
+    }
+  } catch (error) {
+    console.log(`${colors.red}Test Suite 52 setup failed: ${error.message}${colors.reset}`);
+    console.log(error.stack);
+    failed++;
+  }
+
+  console.log('');
+
+  // ============================================================
   // Summary
   // ============================================================
   console.log(`${colors.cyan}========================================`);
