@@ -461,6 +461,11 @@ async function runTests() {
 
     const tempProjectDir9 = await fs.mkdtemp(path.join(os.tmpdir(), 'bmad-claude-code-test-'));
     const installedBmadDir9 = await createTestBmadFixture();
+    const sourceSkillDir9 = path.join(installedBmadDir9, 'core', 'bmad-master');
+    await fs.ensureDir(path.join(sourceSkillDir9, '__pycache__'));
+    await fs.writeFile(path.join(sourceSkillDir9, '__pycache__', 'cached.pyc'), 'bytecode');
+    await fs.writeFile(path.join(sourceSkillDir9, 'cached.pyc'), 'bytecode');
+    await fs.writeFile(path.join(sourceSkillDir9, 'cached.pyo'), 'bytecode');
 
     const ideManager9 = new IdeManager();
     await ideManager9.ensureInitialized();
@@ -473,6 +478,16 @@ async function runTests() {
 
     const skillFile9 = path.join(tempProjectDir9, '.claude', 'skills', 'bmad-master', 'SKILL.md');
     assert(await fs.pathExists(skillFile9), 'Claude Code install writes SKILL.md directory output');
+    const installedSkillDir9 = path.dirname(skillFile9);
+    assert(
+      !(await fs.pathExists(path.join(installedSkillDir9, '__pycache__'))),
+      'Claude Code skill install excludes Python cache directories',
+    );
+    assert(
+      !(await fs.pathExists(path.join(installedSkillDir9, 'cached.pyc'))) &&
+        !(await fs.pathExists(path.join(installedSkillDir9, 'cached.pyo'))),
+      'Claude Code skill install excludes Python bytecode',
+    );
 
     // Verify name frontmatter matches directory name
     const skillContent9 = await fs.readFile(skillFile9, 'utf8');
