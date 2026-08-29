@@ -14,6 +14,10 @@ export const locales = {
     label: 'English',
     lang: 'en',
   },
+  'ko-kr': {
+    label: '한국어',
+    lang: 'ko-KR',
+  },
   'vi-vn': {
     label: 'Tiếng Việt',
     lang: 'vi-VN',

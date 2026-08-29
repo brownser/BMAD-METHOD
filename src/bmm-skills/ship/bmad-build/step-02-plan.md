@@ -37,7 +37,7 @@
 
 Only when Open Questions is empty.
 
-Present summary. Display the spec file path in whatever form is clickable where you are presenting it (e.g. code citation in chat, CWD-relative path with no leading `/` in terminal). If unsure, use CWD-relative path. 
+Present summary. Display the spec file path in whatever form is clickable where you are presenting it (e.g. code citation in chat, CWD-relative path with no leading `/` in terminal). If unsure, use CWD-relative path.
 
 If token count exceeded 1600 and the user chose to keep the full spec, include the token count and explain why it may be a problem.
 

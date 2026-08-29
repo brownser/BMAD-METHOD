@@ -46,6 +46,7 @@ export default defineConfig({
     '/explanation/retrospective': `${basePath}plan/finish-an-epic/`,
     '/fr/how-to/non-interactive-installation': `${basePath}fr/how-to/install-bmad/`,
     '/cs/how-to/non-interactive-installation': `${basePath}cs/how-to/install-bmad/`,
+    '/ko-kr/how-to/non-interactive-installation': `${basePath}ko-kr/how-to/install-bmad/`,
     '/vi-vn/how-to/non-interactive-installation': `${basePath}vi-vn/how-to/install-bmad/`,
     '/zh-cn/how-to/non-interactive-installation': `${basePath}zh-cn/how-to/install-bmad/`,
   },
@@ -102,17 +103,18 @@ export default defineConfig({
       sidebar: [
         {
           label: 'Start',
-          translations: { 'vi-VN': 'Bắt đầu', 'zh-CN': '开始', 'fr-FR': 'Démarrer', 'cs-CZ': 'Začít' },
+          translations: { 'ko-KR': '시작하기', 'vi-VN': 'Bắt đầu', 'zh-CN': '开始', 'fr-FR': 'Démarrer', 'cs-CZ': 'Začít' },
           collapsed: false,
           items: [
             {
               label: 'Welcome',
-              translations: { 'vi-VN': 'Chào mừng', 'zh-CN': '欢迎', 'fr-FR': 'Bienvenue', 'cs-CZ': 'Vítejte' },
+              translations: { 'ko-KR': '환영합니다', 'vi-VN': 'Chào mừng', 'zh-CN': '欢迎', 'fr-FR': 'Bienvenue', 'cs-CZ': 'Vítejte' },
               slug: 'index',
             },
             {
               label: 'Install BMad',
               translations: {
+                'ko-KR': 'BMad 설치',
                 'vi-VN': 'Cách cài đặt BMad',
                 'zh-CN': '如何安装 BMad',
                 'fr-FR': 'Comment installer BMad',
@@ -122,19 +124,26 @@ export default defineConfig({
             },
             {
               label: 'Build Your First Change',
-              translations: { 'vi-VN': 'Bắt đầu', 'zh-CN': '快速入门', 'fr-FR': 'Premiers pas', 'cs-CZ': 'Začínáme' },
+              translations: {
+                'ko-KR': '첫 번째 변경 사항 구현하기',
+                'vi-VN': 'Bắt đầu',
+                'zh-CN': '快速入门',
+                'fr-FR': 'Premiers pas',
+                'cs-CZ': 'Začínáme',
+              },
               slug: 'start/build-your-first-change',
             },
           ],
         },
         {
           label: 'Build',
-          translations: { 'vi-VN': 'Xây dựng', 'zh-CN': '构建', 'fr-FR': 'Construire', 'cs-CZ': 'Sestavit' },
+          translations: { 'ko-KR': 'Build', 'vi-VN': 'Xây dựng', 'zh-CN': '构建', 'fr-FR': 'Construire', 'cs-CZ': 'Sestavit' },
           collapsed: false,
           items: [
             {
               label: 'Build a Change',
               translations: {
+                'ko-KR': '변경 사항 구현하기',
                 'vi-VN': 'Xây dựng một thay đổi',
                 'zh-CN': '构建一个变更',
                 'fr-FR': 'Construire un changement',
@@ -155,6 +164,7 @@ export default defineConfig({
             {
               label: 'Walk Through a Change',
               translations: {
+                'ko-KR': '변경 사항 살펴보기',
                 'vi-VN': 'Đi qua một thay đổi',
                 'zh-CN': '走查一个变更',
                 'fr-FR': 'Parcourir un changement',
@@ -165,6 +175,7 @@ export default defineConfig({
             {
               label: 'Test Completed Work',
               translations: {
+                'ko-KR': '완료된 작업 테스트하기',
                 'vi-VN': 'Kiểm thử công việc đã xong',
                 'zh-CN': '测试已完成的工作',
                 'fr-FR': 'Tester le travail terminé',
@@ -268,43 +279,68 @@ export default defineConfig({
         },
         {
           label: 'Tutorials',
-          translations: { 'vi-VN': 'Hướng dẫn nhập môn', 'zh-CN': '教程', 'fr-FR': 'Tutoriels', 'cs-CZ': 'Tutoriály' },
+          translations: { 'ko-KR': '튜토리얼', 'vi-VN': 'Hướng dẫn nhập môn', 'zh-CN': '教程', 'fr-FR': 'Tutoriels', 'cs-CZ': 'Tutoriály' },
           collapsed: false,
           items: [{ autogenerate: { directory: 'tutorials' } }],
         },
         {
           label: 'How-To Guides',
-          translations: { 'vi-VN': 'Hướng dẫn tác vụ', 'zh-CN': '操作指南', 'fr-FR': 'Guides pratiques', 'cs-CZ': 'Praktické návody' },
+          translations: {
+            'ko-KR': '사용 가이드',
+            'vi-VN': 'Hướng dẫn tác vụ',
+            'zh-CN': '操作指南',
+            'fr-FR': 'Guides pratiques',
+            'cs-CZ': 'Praktické návody',
+          },
           collapsed: true,
           items: [{ autogenerate: { directory: 'how-to' } }],
         },
         {
           label: 'Explanation',
-          translations: { 'vi-VN': 'Giải thích', 'zh-CN': '概念说明', 'fr-FR': 'Explications', 'cs-CZ': 'Vysvětlení' },
+          translations: {
+            'ko-KR': '개념 설명',
+            'vi-VN': 'Giải thích',
+            'zh-CN': '概念说明',
+            'fr-FR': 'Explications',
+            'cs-CZ': 'Vysvětlení',
+          },
           collapsed: true,
           items: [{ autogenerate: { directory: 'explanation' } }],
         },
         {
           label: 'Reference',
-          translations: { 'vi-VN': 'Tham chiếu', 'zh-CN': '参考', 'fr-FR': 'Référence', 'cs-CZ': 'Reference' },
+          translations: { 'ko-KR': '참조', 'vi-VN': 'Tham chiếu', 'zh-CN': '参考', 'fr-FR': 'Référence', 'cs-CZ': 'Reference' },
           collapsed: true,
           items: [{ autogenerate: { directory: 'reference' } }],
         },
         // TEA docs moved to standalone module site; keep BMM sidebar focused.
         {
           label: 'BMad Ecosystem',
-          translations: { 'vi-VN': 'Hệ sinh thái BMad', 'zh-CN': 'BMad 生态系统', 'fr-FR': 'Écosystème BMad', 'cs-CZ': 'Ekosystém BMad' },
+          translations: {
+            'ko-KR': 'BMad 생태계',
+            'vi-VN': 'Hệ sinh thái BMad',
+            'zh-CN': 'BMad 生态系统',
+            'fr-FR': 'Écosystème BMad',
+            'cs-CZ': 'Ekosystém BMad',
+          },
           collapsed: false,
           items: [
             {
               label: 'BMad Builder',
-              translations: { 'vi-VN': 'BMad Builder', 'zh-CN': 'BMad 构建器', 'fr-FR': 'BMad Builder', 'cs-CZ': 'BMad Builder' },
+              translations: {
+                'ko-KR': 'BMad Builder',
+                'vi-VN': 'BMad Builder',
+                'zh-CN': 'BMad 构建器',
+                'fr-FR': 'BMad Builder',
+                'cs-CZ': 'BMad Builder',
+              },
               link: 'https://bmad-builder-docs.bmad-method.org/',
               attrs: { target: '_blank' },
             },
             {
               label: 'Creative Intelligence Suite',
               translations: {
+                'ko-KR': '창의적 지능 제품군',
                 'vi-VN': 'Bộ công cụ Trí tuệ Sáng tạo',
                 'zh-CN': '创意智能套件',
                 'fr-FR': "Suite d'Intelligence Créative",
@@ -316,6 +352,7 @@ export default defineConfig({
             {
               label: 'Game Dev Studio',
               translations: {
+                'ko-KR': '게임 개발 스튜디오',
                 'vi-VN': 'Xưởng phát triển Game',
                 'zh-CN': '游戏开发工作室',
                 'fr-FR': 'Studio de Développement de Jeux',
@@ -327,6 +364,7 @@ export default defineConfig({
             {
               label: 'Test Architect (TEA)',
               translations: {
+                'ko-KR': '테스트 설계자(TEA)',
                 'vi-VN': 'Kiến trúc sư Kiểm thử (TEA)',
                 'zh-CN': '测试架构师 (TEA)',
                 'fr-FR': 'Architecte de Tests (TEA)',
